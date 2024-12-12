@@ -1,0 +1,10 @@
+set up the Angular and .NET environment
+Implement WebRTC Multi person video conferencing
+  - Frontend : WebRTC with simple-peer
+  - Backend : SignalR for signaling
+Meeting Scheduling and invitation code
+Screen Sharing
+Video Background Replacement
+Meeting Chat
+Audio/Video Device Testing
+Permission Management
