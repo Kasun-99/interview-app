@@ -1,0 +1,43 @@
+<div class="container">
+  <!-- Main Content (Screen Sharing) -->
+  <div class="main-window">
+    <!-- Screen Sharing -->
+    <div class="video-container">
+      <video #videoElement autoplay></video>
+    </div>
+  </div>
+
+  <!-- Sidebar (Chat and Participants) -->
+  <div class="sidebar">
+    <div class="tabs">
+      <button [class.active]="activeTab === 'chat'" (click)="setActiveTab('chat')">Chat</button>
+      <button [class.active]="activeTab === 'participants'" (click)="setActiveTab('participants')">Participants</button>
+    </div>
+
+    <div class="tab-content">
+      <!-- Chat Tab -->
+      <div *ngIf="activeTab === 'chat'" class="chat-tab">
+        <h3>Start a conversation</h3>
+        <p>No messages yet. Start a conversation by sending a message.</p>
+        <input type="text" placeholder="Send a message..." [(ngModel)]="chatMessage" />
+        <button (click)="sendMessage()">Send</button>
+      </div>
+
+      <!-- Participants Tab -->
+      <div *ngIf="activeTab === 'participants'" class="participants-tab">
+        <h3>Participants</h3>
+        <ul>
+          <li *ngFor="let participant of participants">{{ participant }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Controls -->
+  <div class="bottom-controls">
+    <button (click)="toggleMic()">Mic</button>
+    <button (click)="toggleCamera()">Camera</button>
+    <button (click)="toggleScreenShare()">{{ isScreenSharing ? 'Stop Screen' : 'Share Screen' }}</button>
+    <button class="leave-button">Leave</button>
+  </div>
+</div>

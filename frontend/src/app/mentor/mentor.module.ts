@@ -2,12 +2,16 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { MentorRoutingModule } from './mentor-routing.module';
-import { MentorComponent } from './mentor.component';
+import { MentorComponent } from './component/mentor.component';
+import { ScheduleMeetingComponent } from './component/schedule-meeting/schedule-meeting.component';
+import { ParticipantListComponent } from './component/participant-list/participant-list.component';
 
 
 @NgModule({
   declarations: [
-    MentorComponent
+    MentorComponent,
+    ScheduleMeetingComponent,
+    ParticipantListComponent
   ],
   imports: [
     CommonModule,

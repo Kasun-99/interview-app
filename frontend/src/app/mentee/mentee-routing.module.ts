@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { MenteeComponent } from './mentee.component';
+import { MenteeComponent } from './component/mentee.component';
 
 const routes: Routes = [{ path: '', component: MenteeComponent }];
 
