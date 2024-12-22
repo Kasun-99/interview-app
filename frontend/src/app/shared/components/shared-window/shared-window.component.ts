@@ -45,17 +45,6 @@ export class SharedWindowComponent implements AfterViewInit {
     }
   }
 
-  // Bottom control actions
-  //toggleMic() {
-  //   console.log('Mic toggled');
-  // }
-
-  // // Toggle between camera and screen share
-  // async toggleCamera() {
-  //   console.log('Camera toggled');
-  //   await this.webrtcService.switchToCamera(this.videoElement.nativeElement);
-  // }
-
   toggleMic() {
     this.isMicEnabled = this.webrtcService.toggleMic();
   }
@@ -71,7 +60,7 @@ export class SharedWindowComponent implements AfterViewInit {
     } else {
       await this.webrtcService.startShareScreen(this.videoElement.nativeElement);
     }
-    this.isScreenSharing = !this.isScreenSharing;
+    this.isScreenSharing = this.webrtcService.isScreenSharing;
   }
 
   
