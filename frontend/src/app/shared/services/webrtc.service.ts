@@ -6,6 +6,24 @@ import { Injectable } from '@angular/core';
 export class WebrtcService {
   private _isScreenSharing: boolean = false;
   mediaStream: MediaStream | null = null;
+  private isMicEnabled = true;
+  private isCameraEnabled = false;
+
+
+  async initializeMediaStream(): Promise<MediaStream | null> {
+    try {
+      this.mediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+
+      // Disable the camera track by default
+      const videoTracks = this.mediaStream.getVideoTracks();
+      videoTracks.forEach((track) => (track.enabled = false));
+
+      return this.mediaStream;
+    } catch (error) {
+      console.error('Error initializing media stream:', error);
+      return null;
+    }
+  }
 
   // Getter to access the isScreenSharing state
   get isScreenSharing(): boolean {
@@ -54,14 +72,33 @@ export class WebrtcService {
     }
   }
 
-  // Switch to webcam
-  async switchToCamera(videoElement: HTMLVideoElement): Promise<void> {
-    console.log('Camera toggled');
-    if (this._isScreenSharing) {
-      this.stopScreenShare(videoElement);
+  getMediaStream(): MediaStream | null {
+    return this.mediaStream;
+  }
+
+  toggleMic(): boolean {
+    if (this.mediaStream) {
+      const audioTracks = this.mediaStream.getAudioTracks();
+      audioTracks.forEach((track) => (track.enabled = !track.enabled));
+      this.isMicEnabled = audioTracks[0]?.enabled || false;
     }
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-    videoElement.srcObject = stream;
-    this.mediaStream = stream;
+    return this.isMicEnabled;
+  }
+
+  toggleCamera(): boolean {
+    if (this.mediaStream) {
+      const videoTracks = this.mediaStream.getVideoTracks();
+      videoTracks.forEach((track) => (track.enabled = !track.enabled));
+      this.isCameraEnabled = videoTracks[0]?.enabled || false;
+    }
+    return this.isCameraEnabled;
+  }
+
+  isMicActive(): boolean {
+    return this.isMicEnabled;
+  }
+
+  isCameraActive(): boolean {
+    return this.isCameraEnabled;
   }
 }

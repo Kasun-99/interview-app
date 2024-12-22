@@ -8,14 +8,22 @@ import { WebrtcService } from '../../services/webrtc.service';
 })
 export class SharedWindowComponent implements AfterViewInit {
   @ViewChild('videoElement') videoElement!: ElementRef<HTMLVideoElement>;
-  activeTab: string = 'chat'; // Default active tab
-  chatMessage: string = ''; // Message input
-  participants: string[] = ['Norah', 'John Doe', 'Jane Smith']; // Dummy participants list
+  activeTab: string = 'chat';
+  chatMessage: string = '';
+  participants: string[] = ['Norah', 'John Doe', 'Jane Smith'];
   isScreenSharing: boolean = false;
+  isMicEnabled = true;
+  isCameraEnabled = false;
   
   constructor(private webrtcService: WebrtcService) {}
 
-  // This lifecycle hook is called once the view is initialized
+  async ngOnInit() {
+    const stream = await this.webrtcService.initializeMediaStream();
+    if (stream) {
+      this.videoElement.nativeElement.srcObject = stream;
+    }
+  }
+
   ngAfterViewInit() {
     if (this.videoElement) {
       console.log('Video element is ready!');
@@ -33,19 +41,27 @@ export class SharedWindowComponent implements AfterViewInit {
   sendMessage() {
     if (this.chatMessage) {
       console.log('Message sent:', this.chatMessage);
-      this.chatMessage = ''; // Clear input
+      this.chatMessage = '';
     }
   }
 
   // Bottom control actions
+  //toggleMic() {
+  //   console.log('Mic toggled');
+  // }
+
+  // // Toggle between camera and screen share
+  // async toggleCamera() {
+  //   console.log('Camera toggled');
+  //   await this.webrtcService.switchToCamera(this.videoElement.nativeElement);
+  // }
+
   toggleMic() {
-    console.log('Mic toggled');
+    this.isMicEnabled = this.webrtcService.toggleMic();
   }
 
-  // Toggle between camera and screen share
-  async toggleCamera() {
-    console.log('Camera toggled');
-    await this.webrtcService.switchToCamera(this.videoElement.nativeElement);
+  toggleCamera() {
+    this.isCameraEnabled = this.webrtcService.toggleCamera();
   }
 
   // Toggle between screen sharing and webcam
@@ -58,8 +74,5 @@ export class SharedWindowComponent implements AfterViewInit {
     this.isScreenSharing = !this.isScreenSharing;
   }
 
-  // Initialize the camera stream on component load
-  private async initializeCamera() {
-    await this.webrtcService.switchToCamera(this.videoElement.nativeElement);
-  }
+  
 }
